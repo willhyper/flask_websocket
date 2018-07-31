@@ -14,7 +14,7 @@
             const socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 
             socket.on('connect', function(msg) {
-                {#socket.emit('my event', {data: 'I am connected!'}); // emit to backend#}
+                {#socket.emit('from_frontend_to_backend', {data: 'I am connected!'}); // emit to backend#}
             });
 
             const logger = $('#log_backend');
