@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Flask-SocketIO Example</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.3.1.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='socket.io-2.1.1.js') }}"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function(){
+            const namespace = '/test'; // change to an empty string to use the global namespace
+
+            // the socket.io documentation recommends sending an explicit package upon connection
+            // this is specially important when using the global namespace
+            const socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+
+            socket.on('connect', function(msg) {
+                {#socket.emit('my event', {data: 'I am connected!'}); // emit to backend#}
+            });
+
+            const logger = $('#log_backend');
+
+            socket.on('from_backend_to_frontend', function(msg){
+                {#console.log(msg.time);#}
+                {#let msg_original = obj.html();#}
+                let msg_new = '<p>' + JSON.stringify(msg) + '</p>';
+                {#obj.html(msg_original + msg_new);#}
+                logger.append(msg_new);
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <h3>Flask-SocketIO</h3>
+    <p id='log_backend'/>
+</body>
+</html>
