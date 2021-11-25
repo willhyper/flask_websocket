@@ -1,16 +1,9 @@
 from flask import render_template, request, json
-from . import flask_app, socketio, from_backend_to_frontend
+from . import flask_app, socketio
 
 
-def worker_coro():
-    while True:
-        msg = yield
-        from_backend_to_frontend({'meesage from coroutine': msg})
-
-
-wc = worker_coro()
-wc.send(None)
-
+def from_backend_to_frontend(msg):
+    socketio.emit('from_backend_to_frontend', msg, namespace='/test')
 
 @flask_app.route('/', methods=['GET', ])
 def index():
@@ -21,8 +14,7 @@ def index():
 def send():
     msg = request.args.get('message', None)
     if msg:
-        from_backend_to_frontend({'message':msg})
-        wc.send(msg)
+        from_backend_to_frontend({'message':msg})        
     return json.dumps({'message sent':msg})
 
 
@@ -33,11 +25,6 @@ def my_event(msg):
 
 @socketio.on('connect', namespace='/test')
 def on_connect():
-    # emit('my response', {'data': 'Connected', 'count': 0})
-    global wc
-    wc = worker_coro()
-    wc.send(None)
-
     from_backend_to_frontend({'message': 'connected'})
 
 
