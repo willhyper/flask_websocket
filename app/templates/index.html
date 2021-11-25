@@ -12,7 +12,7 @@
 
             // the socket.io documentation recommends sending an explicit package upon connection
             // this is specially important when using the global namespace
-            const socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+            const socket = io.connect('https://' + document.domain + ':' + location.port + namespace);
 
             socket.on('connect', function(msg) {
                 socket.emit('from_frontend_to_backend', {data: 'frontend connected!'}); // emit to backend
