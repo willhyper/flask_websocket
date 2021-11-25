@@ -15,19 +15,17 @@
             const socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 
             socket.on('connect', function(msg) {
-                {#socket.emit('from_frontend_to_backend', {data: 'I am connected!'}); // emit to backend#}
+                socket.emit('from_frontend_to_backend', {data: 'frontend connected!'}); // emit to backend
             });
 
             const logger = $('#log_backend');
 
-            socket.on('from_backend_to_frontend', function(msg){
-                {#console.log(msg.time);#}
-                {#let msg_original = obj.html();#}
+            socket.on('from_backend_to_frontend', function(msg){                
                 let msg_new = '<p>' + JSON.stringify(msg) + '</p>';
-                {#obj.html(msg_original + msg_new);#}
                 logger.append(msg_new);
             });
 
+            
         });
     </script>
 </head>
